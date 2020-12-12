@@ -2,8 +2,7 @@ source $HOME"/scripts/include.sh"
 
 mnemonics_suggested_list_location="https://raw.githubusercontent.com/Mikail-Eliyah/At-The-Back-Of-Your-Head-An-Insight-To-Mnemonics/main/mnemonics_suggested_list_00.txt"
 
-function usage_mnemonics_practice_100_friends_practice(){
-	number_of_digits_for_inputs=2;
+function obtain_mnemonics_list(){
 	echo "location: " $mnemonics_suggested_list_location
 	
 	get_filename_n_extension $mnemonics_suggested_list_location
@@ -13,6 +12,12 @@ function usage_mnemonics_practice_100_friends_practice(){
 	
 	# get_file
 	curl -s -O -L --insecure $mnemonics_suggested_list_location
+	
+}
+
+function usage_mnemonics_practice_100_friends_practice_00(){
+	number_of_digits_for_inputs=2;
+	obtain_mnemonics_list;
 	
 	person_id='0'
 	
@@ -37,6 +42,39 @@ function usage_mnemonics_practice_100_friends_practice(){
 	
 }
 
+function usage_mnemonics_practice_100_friends_practice_01(){
+	number_of_digits_for_inputs=2;
+	obtain_mnemonics_list;
+	
+	person_id='0'
+	
+	while [ $person_id != '-' ]
+	do
+		read  -n $number_of_digits_for_inputs -p "(enter '-' to exit) or just hit [enter] to random select:" person_id
+		
+		if [ $person_id == '-' ];
+		then		
+			rm -rf $file_name
+			return 0;	
+		else
+			person_id=$(shuf -i 0-99 -n 1);
+			
+			if [ ${#person_id} -lt 2 ];
+			then
+			person_id='0'$person_id;
+			fi;
+
+		fi;
+		clr;
+		echo ""
+		cat $file_name | grep -i $person_id". ";
+		
+		# person_id='-'
+	done
+	
+}
+
+
 function usage_mnemonics_practice_100_friends_main() {
 	usage_mnemonics_practice_100_friends_menu;
 	
@@ -47,7 +85,11 @@ function usage_mnemonics_practice_100_friends_main() {
 	
     if [ "$usage_mnemonics_practice_100_friends_menu_input" = "1" ]; then
 		#		
-		usage_mnemonics_practice_100_friends_practice;
+		usage_mnemonics_practice_100_friends_practice_00;
+
+    elif [ "$usage_mnemonics_practice_100_friends_menu_input" = "2" ]; then
+		#		
+		usage_mnemonics_practice_100_friends_practice_01;
 
     elif [ "$usage_mnemonics_practice_100_friends_menu_input" = "x" -o "$usage_mnemonics_practice_100_friends_menu_input" = "X" ];then # -o := `or` and `||`
 		exit_program_for_menu;
@@ -58,7 +100,8 @@ function usage_mnemonics_practice_100_friends_main() {
 }
 
 function usage_mnemonics_practice_100_friends_menu() {
-  echo "1 : start_practice"
+  echo "1 : start_practice : manually choose the friend"
+  echo "2 : start_practice : random select the friend"
   
   echo ""
   echo "'x' or 'X' to exit the script"
