@@ -15,6 +15,13 @@ function obtain_mnemonics_list(){
 	
 }
 
+
+function display_candidate(){
+		clr;
+		echo ""
+		cat $file_name | grep -i $person_id". " | cut -d'.' -f 1-2
+}
+
 function usage_mnemonics_practice_100_friends_practice_00(){
 	number_of_digits_for_inputs=2;
 	obtain_mnemonics_list;
@@ -33,9 +40,8 @@ function usage_mnemonics_practice_100_friends_practice_00(){
 		then
 			person_id='0'$person_id;
 		fi;
-		clr;
-		echo ""
-		cat $file_name | grep -i $person_id". ";
+
+		display_candidate;
 		
 		# person_id='-'
 	done
@@ -65,9 +71,8 @@ function usage_mnemonics_practice_100_friends_practice_01(){
 			fi;
 
 		fi;
-		clr;
-		echo ""
-		cat $file_name | grep -i $person_id". ";
+		
+		display_candidate;
 		
 		# person_id='-'
 	done
